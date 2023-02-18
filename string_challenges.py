@@ -2,10 +2,9 @@
 word = 'Архангельск'
 print(word[-1])
 
-from collections import Counter
 # Вывести количество букв "а" в слове
 word = 'Архангельск'
-print(Counter(word.lower())['а'])
+print(word.lower().count('а'))
 
 
 
@@ -13,9 +12,9 @@ print(Counter(word.lower())['а'])
 word = 'Архангельск'
 vowels = ["а", "е", "ё", "и", "о", "у", "э", "ю", "я"]
 vowels_counter = 0
-for each in Counter(word.lower()):
+for each in word.lower():
     if each in vowels:
-        vowels_counter += Counter(word.lower())[each]
+        vowels_counter += 1
 print(vowels_counter)
 
 # Вывести количество слов в предложении

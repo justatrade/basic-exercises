@@ -14,11 +14,10 @@ students = [
 ]
 
 from collections import Counter
-students_counted = [x['first_name'] for x in students]
-students_counted = Counter(students_counted)
+students_counted = Counter([x['first_name'] for x in students])
 for each in students_counted:
     print(f"{each}: {students_counted[each]}")
-print("Конец задания\n")
+print("Конец задания 1\n")
 
 # Задание 2
 # Дан список учеников, нужно вывести самое часто повторящееся имя
@@ -34,16 +33,12 @@ students = [
 
 
 def popular_counter(students: list):
-    students_counted = [x['first_name'] for x in students]
-    students_counted = Counter(students_counted)
-    for each in students_counted:
-        if students_counted[each] == max(students_counted.values()):
-            print(f"{each} is the most repeated name "
-                  f"with a result {students_counted[each]}")
-
+    students_counted = Counter([x['first_name'] for x in students])
+    print(f"{students_counted.most_common()[0][0]} is the most repeated name "
+          f"with a result {students_counted.most_common()[0][1]}")
 
 popular_counter(students)
-print("Конец задания\n")
+print("Конец задания 2\n")
 
 # Задание 3
 # Есть список учеников в нескольких классах, нужно вывести самое частое имя в каждом классе.
@@ -70,7 +65,7 @@ school_students = [
 for each in range(len(school_students)):  #Не могу использовать Counter. Объект list не хэшируемый
     print(f"Class # {each+1}")
     popular_counter(school_students[each])
-print("Конец задания\n")
+print("Конец задания 3\n")
 
 # Задание 4
 # Для каждого класса нужно вывести количество девочек и мальчиков в нём.
@@ -91,29 +86,27 @@ is_male = {
     'Даша': False,
 }
 
-import random
-
 
 def class_count(school_list: list):
     mf_dict = {}
     for each in school_list:
-        cur_cl = each['class']
+        cur_class = each['class']
         for learner in each['students']:
+            mf_dict.setdefault(cur_class, {'boys': 0, 'girls': 0})
             if learner['first_name'] in is_male:
                 if is_male[learner['first_name']]:
-                    mf_dict.setdefault(cur_cl, [0, 0])[0] += 1
+                    mf_dict[cur_class]['boys'] += 1
                 else:
-                    mf_dict.setdefault(cur_cl, [0, 0])[1] += 1
-            else:
-                mf_dict.setdefault(cur_cl, [0, 0])[random.randint(0,1)] += 1  # Если не нашли имя в
-                # справочнике, увеличим счётчик случайного пола)
+                    mf_dict[cur_class]['girls'] += 1
     return mf_dict
 
 
 mf_dict = class_count(school)
 for each in mf_dict:
-    print(f"Class {each}: girls {mf_dict[each][1]}, boys {mf_dict[each][0]}")
-print("Конец задания\n")
+    print(f"Class {each}: "
+          f"girls {mf_dict[each]['girls']}, "
+          f"boys {mf_dict[each]['boys']}")
+print("Конец задания 4\n")
 
 # Задание 5
 # По информации о учениках разных классов нужно найти класс, в котором больше всего девочек и больше всего мальчиков
@@ -134,13 +127,17 @@ is_male = {
     'Олег': True,
     'Миша': True,
 }
-max_sex = {'boys': ['', 0], 'girls': ['', 0] }
-mf_dict = class_count(school)  # Получаем словарь вида {'class': [boys, girls]}
+max_sex = {'boys': ['', 0], 'girls': ['', 0] }  # Переделал словарь прошлого упражнения,
+# который используется и в этом. Но словарь max_sex вынужден оставить без изменения,
+# ведь ключевое - это количество мальчиков и девочек, и обходя весь исходный словарь,
+# я определяю, где больше всего, и сохраняю.
+mf_dict = class_count(school)  # Получаем словарь вида {'class': {'boys': #, 'girls': #}}
 for each in mf_dict:
-    if max_sex['boys'][1] < mf_dict[each][0]:
-        max_sex['boys'] = [each, mf_dict[each][0]]
-    if max_sex['girls'][1] < mf_dict[each][1]:
-        max_sex['girls'] = [each, mf_dict[each][1]]
+    if max_sex['boys'][1] < mf_dict[each]['boys']:
+        max_sex['boys'] = [each, mf_dict[each]['boys']]
+    if max_sex['girls'][1] < mf_dict[each]['girls']:
+        max_sex['girls'] = [each, mf_dict[each]['girls']]
 for each in max_sex:
-    print(f"Most number of {each} is in class {max_sex[each][0]}")
-
+    print(f"Most number of {each} is in class "
+          f"{max_sex[each][0]} - {max_sex[each][1]}")
+print("Конец задания 5\n")
