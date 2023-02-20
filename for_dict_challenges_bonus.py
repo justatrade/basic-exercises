@@ -49,7 +49,9 @@ def generate_chat_history():
             "id": uuid.uuid4(),
             "sent_at": sent_at,
             "sent_by": random.choice(users_ids),
-            "reply_for": random.choice([None, random.choice([m["id"] for m in messages]) if messages else []]),
+            "reply_for": random.choice([None,
+                                        random.choice([m["id"] for m in messages])
+                                        if messages else None]),
             "seen_by": random.sample(users_ids, random.randint(1, len(users_ids))),
             "text": lorem.sentence(),
         })
@@ -74,17 +76,15 @@ def task2(messages):  # 2. Вывести айди пользователя, н�
 def task3(messages):  # 3. Вывести айди пользователей, сообщения которых видело больше всего
     # уникальных пользователей.
     unique_users = {}
-    for every_user in [each['sent_by'] for each in messages]:
-        for seen_list in [each_seen['seen_by'] for each_seen in messages
-                          if each_seen['sent_by'] == every_user]:
-            if every_user in unique_users:
-                unique_users[every_user].update(seen_list)
-            else:
-                unique_users[every_user] = set(seen_list)
+    for each in messages:
+        if each['sent_by'] in unique_users:
+            unique_users[each['sent_by']].update(each['seen_by'])
+        else:
+            unique_users[each['sent_by']] = set(each['seen_by'])
     print('\nThree users with most unique views')
-    for counter, each in enumerate(Counter(unique_users).most_common(), start=1):
+    for counter, each in enumerate(Counter(unique_users).most_common(3)):
         print(f"User {each[0]} has viewrs {each[1]}")
-        if counter == 3: break
+
 
 
 def task4(messages):  # 4. Определить, когда в чате больше всего сообщений: утром (до 12 часов),
@@ -97,7 +97,8 @@ def task4(messages):  # 4. Определить, когда в чате боль
             rush_hours['Daytime'] += 1
         else:
             rush_hours['Evening'] += 1
-    print(f"\nThe rush hours is {Counter(rush_hours).most_common()[0][0]}")
+    print(f"\nThe rush hours is "
+          f"{[x for x in rush_hours if rush_hours[x] == max(rush_hours.values())][0]}")
 
 
 def recursive_search(first_id):
