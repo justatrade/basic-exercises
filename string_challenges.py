@@ -54,9 +54,14 @@ def simple_dict():
     sorted_dict = {}
     for i in sorted(word.values(), reverse=True):
         if i not in sorted_dict.values():
-            sorted_dict.update(dict.fromkeys(sorted([x for x in list(word.keys())
-                                                     if word[x] == i]),
-                                             i))
+            sorted_dict.update(
+                dict.fromkeys(
+                    sorted(
+                        [x for x in list(word.keys())
+                         if word[x] == i]),
+                    i
+                )
+            )
     return sorted_dict
 
 start = time.process_time()
@@ -77,9 +82,14 @@ def default_dict():
     sorted_dict = {}
     for i in sorted(word.values(), reverse=True):
         if i not in sorted_dict.values():
-            sorted_dict.update(dict.fromkeys(sorted([x for x in list(word.keys())
-                                                     if word[x] == i]),
-                                             i))
+            sorted_dict.update(
+                dict.fromkeys(sorted(
+                    [x for x in list(word.keys())
+                     if word[x] == i]
+                ),
+                    i
+                )
+            )
     return sorted_dict
 
 start = time.process_time()
@@ -98,9 +108,14 @@ def counter_dict():
     sorted_dict = {}
     for i in sorted(word.values(), reverse=True):
         if i not in sorted_dict.values():
-            sorted_dict.update(dict.fromkeys(sorted([x for x in list(word.keys())
-                                                     if word[x] == i]),
-                                             i))
+            sorted_dict.update(
+                dict.fromkeys(sorted(
+                    [x for x in list(word.keys())
+                                      if word[x] == i]
+                ),
+                    i
+                )
+            )
     return sorted_dict
 
 start = time.process_time()
