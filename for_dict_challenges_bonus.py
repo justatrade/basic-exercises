@@ -34,12 +34,13 @@ messages = [
 import random
 import uuid
 import datetime
+import time
 
 import lorem
 
 
 def generate_chat_history():
-    messages_amount = random.randint(200, 1000)
+    messages_amount = random.randint(2000, 10000)
     users_ids = list({random.randint(1, 10000) for _ in range(random.randint(5, 20))})
     sent_at = datetime.datetime.now() - datetime.timedelta(days=100)
     messages = []
@@ -72,6 +73,16 @@ def task2(messages):  # 2. Вывести айди пользователя, н�
                          if str(each['id']) == Counter(reply_for)
                          .most_common()[0][0]]
     print(f"\nThe most replyable user is {most_replied_user[0]}")
+
+def task2_1(messages):  # 2. Вывести айди пользователя, на сообщения которого больше всего отвечали.
+    reply_for = []
+    map_dict = {}
+    for each in messages:
+        if each['reply_for'] is not None:
+            reply_for.append(str(each['reply_for']))
+        map_dict[str(each['id'])] = each['sent_by']
+    print(f"\nThe most replyable user is "
+          f"{map_dict[Counter(reply_for).most_common()[0][0]]}")
 
 def task3(messages):  # 3. Вывести айди пользователей, сообщения которых видело больше всего
     # уникальных пользователей.
@@ -129,7 +140,14 @@ if __name__ == "__main__":
     pprint.pprint(messages)
     # print(Counter(generate_chat_history()['sent_by']))
     task1(messages)
+    start = time.process_time()
     task2(messages)
+    end = time.process_time()
+    print(f'2 "for"s done in {end-start} s.')
+    start = time.process_time()
+    task2_1(messages)
+    end = time.process_time()
+    print(f'1 "for" done in {end-start} s.')
     task3(messages)
     task4(messages)
     task5(messages)
